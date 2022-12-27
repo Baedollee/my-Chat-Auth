@@ -35,19 +35,39 @@ const Sign = () => {
         .catch((err) => console.log('22222', err.firebase));
     }
   };
-  const handleGoogleLogin = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((data) => {
-        setGoogleData(data);
-        console.log(data.user.email);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  // const handleGoogleLogin = () => {
+  //   const provider = new GoogleAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then((data) => {
+  //       setGoogleData(data);
+  //       console.log(data.user.email);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  const onSocialClick = (e) => {
+    const {
+      target: { name },
+    } = e;
+    let provider;
+    if (name === 'google') {
+      provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((data) => {
+          setGoogleData(data);
+          console.log(data.user.email);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (name === 'github') {
+    }
   };
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
+
   return (
     <div>
       <form onSubmit={onSubmitHandler}>
@@ -72,8 +92,13 @@ const Sign = () => {
         <input type='submit' value={newAccount ? '계정 생성' : '로그인'} />
       </form>
       <span onClick={toggleAccount}>{newAccount ? '로그인' : '계정 생성'}</span>
-      <button onClick={handleGoogleLogin}>구글 로그인</button>
-      <button>깃헙 로그인</button>
+
+      <button onClick={onSocialClick} name='google'>
+        구글 로그인
+      </button>
+      <button onClick={onSocialClick} name='github'>
+        깃헙 로그인
+      </button>
     </div>
   );
 };
